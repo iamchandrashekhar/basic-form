@@ -51,6 +51,17 @@ jobs:
         with:
           name: app-release-aab
           path: build/app/outputs/bundle/release/app-release.aab
+      - name: Build Web
+        run: flutter build web --release
+      - name: Create Web Archive
+        run: |
+          cd build/web
+          tar -czf ../web-release.tar.gz .
+      - name: Upload Web
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-web
+          path: build/web-release.tar.gz
 
   release:
     name: Create GitHub Release
@@ -69,6 +80,11 @@ jobs:
         with:
           name: app-release-aab
           path: ./aab
+      - name: Download Web artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-release-web
+          path: ./web
       - name: Get version name
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
@@ -81,6 +97,7 @@ jobs:
           files: |
             ./apk/app-release.apk
             ./aab/app-release.aab
+            ./web/web-release.tar.gz
           draft: false
           prerelease: false
         env:
