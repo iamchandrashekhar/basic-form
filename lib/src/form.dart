@@ -18,7 +18,7 @@ class Homepage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("User Form"),
-        backgroundColor: theme.colorScheme.primary.withOpacity(0.6),
+        backgroundColor: theme.colorScheme.primary.withAlpha(153),
       ),
       body: Form(
         key: formKey,

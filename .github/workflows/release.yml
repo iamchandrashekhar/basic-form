@@ -3,7 +3,7 @@ name: Release Flutter App
 on:
   push:
     tags:
-      - "v*"
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -31,7 +31,10 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "stable"
+          flutter-version: "3.32.5"
+      - name: Configure git
+        run: |
+          git config --global --add safe.directory /opt/hostedtoolcache/flutter/stable-3.3.10-x64
       - name: Install dependencies
         run: flutter pub get
       - name: Build APK
@@ -66,14 +69,19 @@ jobs:
         with:
           name: app-release-aab
           path: ./aab
+      - name: Get version name
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          name: ${{ steps.version.outputs.VERSION }}
           body: ${{ needs.changelog.outputs.changelog }}
           files: |
             ./apk/app-release.apk
             ./aab/app-release.aab
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
