@@ -1,0 +1,8 @@
+{
+    "categories": [
+        "*"
+    ],
+    "template": "## Changelog\n{{CHANGELOG}}",
+    "pr_template": "- {{TITLE}} (#{{NUMBER}}) by @{{AUTHOR}}",
+    "commit_template": "- {{COMMIT_MESSAGE}} ({{COMMIT_SHA}}) by @{{AUTHOR}}"
+}
